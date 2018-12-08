@@ -1,28 +1,86 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import axios from "axios";
+import { Route, withRouter } from "react-router-dom";
+
+import styled from "styled-components";
+
+import Nav from "./components/Nav";
+import Projects from "./components/Projects";
+
+const Container = styled.div`
+  font-family: "IBM Plex Sans", sans-serif;
+  background: rgb(184, 167, 204);
+`;
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      projects: [],
+      actions: []
+    };
+  }
+
+  componentDidMount() {
+    axios
+      .get("http://localhost:3000/api/project/")
+      .then(res => {
+        this.setState({ projects: res.data });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    axios
+      .get("http://localhost:3000/api/action/")
+      .then(res => {
+        this.setState({ actions: res.data });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  addProject = newProject => {
+    axios
+      .post("http://localhost:3000/api/project", newProject)
+      .then(res => {
+        this.setState({ projects: res.data });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    this.props.history.push("/");
+  };
+
+  deleteProject = id => {
+    axios
+      .delete(`http://localhost:3000/api/project/${id}`)
+      .then(res => {
+        this.setState({ projects: res.data });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    this.props.history.push("/");
+  };
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <Container>
+        <Nav />
+        <Route
+          exact
+          path="/"
+          render={props => (
+            <Projects {...props} projects={this.state.projects} />
+          )}
+        />
+      </Container>
     );
   }
 }
 
-export default App;
+export default withRouter(App);
