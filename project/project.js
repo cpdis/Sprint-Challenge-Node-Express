@@ -184,4 +184,48 @@ router.delete("/:project_id", (req, res) => {
     });
 });
 
+router.put("/:project_id", (req, res) => {
+  const { project_id } = req.params;
+  const { name, description, completed } = req.body;
+  const updateProject = { name, description, completed };
+
+  if (updateProject) {
+    db.update(project_id, updateProject)
+      .then(project => {
+        if (project) {
+          res.json({ message: "Successfully updated!" });
+        } else {
+          res.status(404).json({
+            message: "The project with the specified ID does not exist."
+          });
+        }
+      })
+      .catch(err => {
+        res.status(500).json({ message: "The project could not be modified." });
+      });
+  } else {
+    res.status(400).json({
+      message: "Please provide the required information to update the project."
+    });
+
+    // Error
+    if (err.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      console.log(err.response.data);
+      console.log(err.response.status);
+      console.log(err.response.headers);
+    } else if (err.request) {
+      // The request was made but no response was received
+      // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+      // http.ClientRequest in node.js
+      console.log(err.request);
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      console.log("Error", err.message);
+    }
+    console.log(err.config);
+  }
+});
+
 module.exports = router;
