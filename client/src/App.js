@@ -9,7 +9,7 @@ import Projects from "./components/Projects";
 
 const Container = styled.div`
   font-family: "IBM Plex Sans", sans-serif;
-  background: rgb(184, 167, 204);
+  background: royalblue;
 `;
 
 class App extends Component {
