@@ -1,0 +1,9 @@
+{
+  "name": "Sprint-Challenge-Node-Express",
+  "version": "0.0.1",
+  "description": "Sprint challenge for the Node and Express modules of Lambda School FSW.",
+  "main": "index.js",
+  "repository": "https://github.com/cpdis/Sprint-Challenge-Node-Express.git",
+  "author": "Colin Dismuke <colin.dismuke@gmail.com>",
+  "license": "MIT"
+}
